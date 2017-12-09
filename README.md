@@ -6,4 +6,4 @@
 
 * The input files are to be added in "input" folder. While changing the dataset make sure "bin" folder is empty.
 
-* Pycharm has been used as the IDE and there will few compilation errors if code is executed otherwise.
+* Pycharm has been used as the IDE and there will be a few compilation errors if code is executed otherwise.

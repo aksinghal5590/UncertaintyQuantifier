@@ -1,9 +1,9 @@
 import csv
 import statistics
 
-def evaluateCI():
+def evaluateCI(inputDir):
     trCIMap = dict()
-    with open('../input/quant_bootstraps.tsv') as tsv:
+    with open('../input/' + inputDir + '/quant_bootstraps.tsv') as tsv:
         for column in zip(*[line for line in csv.reader(tsv, dialect="excel-tab")]):
             bootstrapData = list(column)
             trID = bootstrapData.pop(0)

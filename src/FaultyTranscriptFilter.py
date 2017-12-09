@@ -1,11 +1,11 @@
 from src import EvaluateCIFromBootstrap
 
 
-def filterFaultyTranscripts():
-    ciMap = EvaluateCIFromBootstrap.evaluateCI()
+def filterFaultyTranscripts(inputDir):
+    ciMap = EvaluateCIFromBootstrap.evaluateCI(inputDir)
     lineCount = 0
     faultyTr = list()
-    for line in open('../input/poly_truth.tsv'):
+    for line in open('../input/' + inputDir + '/poly_truth.tsv'):
         lineCount += 1
         if lineCount == 1:
             continue

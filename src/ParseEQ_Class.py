@@ -2,14 +2,14 @@ from src import FaultyTranscriptFilter
 from src import dataForGraphs
 import csv
 
-def parseEQClass():
+def parseEQClass(inputDir):
     trCount = 0
     lineCount = 0
     trMap = dict()
     trEqMap = dict()
     i = 0
     j = 0
-    for line in open('../input/eq_classes.txt'):
+    for line in open('../input/' + inputDir + '/eq_classes.txt'):
         lineCount += 1
         if(lineCount == 1):
             trCount = int(line)
@@ -45,13 +45,13 @@ def parseEQClass():
     return trEqMap
 
 
-def getUniqueAndAmbiguousMaps():
+def getUniqueAndAmbiguousMaps(inputDir):
     uniquely_mapped_tr_list = []
     weight_map = dict()
-    faultyList = FaultyTranscriptFilter.filterFaultyTranscripts()
-    errorMap = dataForGraphs.get_AllTrancriptsError_CSV()
+    faultyList = FaultyTranscriptFilter.filterFaultyTranscripts(inputDir)
+    errorMap = dataForGraphs.get_AllTrancriptsError_CSV(inputDir)
 
-    trEQMap = parseEQClass()
+    trEQMap = parseEQClass(inputDir)
     for tr in faultyList:
         if tr in trEQMap.keys():
             eq_tuple = trEQMap[tr]
@@ -65,9 +65,9 @@ def getUniqueAndAmbiguousMaps():
     print("Faulty list length: ", len(faultyList))
     print("Uniquely mapped faulty list length: ", len(uniquely_mapped_tr_list))
 
-    v = open("../input/quant.sf","r")
+    v = open('../input/' + inputDir + '/quant.sf',"r")
     r = csv.reader(v,delimiter="\t")
-    write = open("../bin/quant_new.csv", "w")
+    write = open("../bin/quant_new_" + inputDir + ".csv", "w")
     writer = csv.writer(write,dialect='excel',delimiter='\t',quoting=csv.QUOTE_ALL)
     for row in r:
         tr = row[0].split('\t')[0]
