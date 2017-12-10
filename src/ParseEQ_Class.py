@@ -96,3 +96,46 @@ def getUniqueAndAmbiguousMaps(inputDir):
         writer.writerow(row)
     v.close()
     write.close()
+
+
+def get_unique_ambiguous_maps(inputDir):
+    uniquely_mapped_tr_list = []
+    weight_map = dict()
+    faulty_txp_class = FaultyTranscriptFilter.get_faulty_txp_class(inputDir)
+
+    trEQMap = parseEQClass(inputDir)
+    for tr in faulty_txp_class.keys():
+        if tr in trEQMap.keys():
+            eq_tuple = trEQMap[tr]
+            if eq_tuple[1] == 1:
+                if eq_tuple[2] == 1:
+                    uniquely_mapped_tr_list.append(tr)
+    for tr in trEQMap.keys():
+        weight_map[tr] = trEQMap[tr][3]
+
+    v = open('../input/' + inputDir + '/quant.sf',"r")
+    r = csv.reader(v,delimiter="\t")
+    write = open("../bin/quant_new_" + inputDir + ".csv", "w")
+    writer = csv.writer(write,dialect='excel',delimiter='\t',quoting=csv.QUOTE_ALL)
+    for row in r:
+        tr = row[0].split('\t')[0]
+        if tr != "Name":
+            if tr in uniquely_mapped_tr_list:
+                row.append(True)
+            else:
+                row.append(False)
+            if tr in weight_map.keys():
+                row.append(weight_map[tr])
+            else:
+                row.append(0)
+            if tr in faulty_txp_class.keys():
+                row.append(faulty_txp_class[tr])
+            else:
+                row.append(0)
+        else:
+            row.append("UniqueMap")
+            row.append("Weight")
+            row.append("Faulty")
+        writer.writerow(row)
+    v.close()
+    write.close()
