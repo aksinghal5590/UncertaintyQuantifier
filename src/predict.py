@@ -102,6 +102,6 @@ def runPredictionModel(inputDir):
 
 
 
-runPredictionModel("poly_mo")
+runPredictionModel("poly_ro")
 #drunPredictionModel("poly_mo")
 
