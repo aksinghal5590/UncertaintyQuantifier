@@ -8,9 +8,16 @@ from src import ParseEQ_Class
 import pickle
 
 def train_model(inputDir):
-    if Path("../bin/data_" + inputDir + ".csv").is_file() == False:
-        ParseEQ_Class.getUniqueAndAmbiguousMaps(inputDir)
-    train_dataframe = pd.read_csv("../bin/data_" + inputDir + ".csv",sep="\t")
+    #if Path("../bin/quant_new_" + inputDir + ".csv").is_file() == False:
+    if Path("../bin/quant_new_poly_mo.csv").is_file() == False:
+        ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_mo")
+    #train_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv",sep="\t")
+    train_dataframe1 = pd.read_csv("../bin/quant_new_poly_mo.csv", sep="\t")
+    if Path("../bin/quant_new_poly_ro.csv").is_file() == False:
+        ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_ro")
+    train_dataframe2 = pd.read_csv("../bin/quant_new_poly_ro.csv",sep="\t")
+    train_dataframe = pd.concat([train_dataframe1,train_dataframe2], axis=0)
+    #train_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv",sep="\t")
     print(train_dataframe.shape)
     train_dataframe["Length"] = train_dataframe["Length"].astype(int)
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
@@ -21,10 +28,10 @@ def train_model(inputDir):
     print(train_dataframe.shape)
     print("Classification started")
     train_dataframe = train_dataframe.drop('Name', axis=1)
-    train_dataframe = train_dataframe.drop('Length',axis=1)
-    train_dataframe = train_dataframe.drop('EffectiveLength',axis=1)
+    #train_dataframe = train_dataframe.drop('Length',axis=1)
+    #train_dataframe = train_dataframe.drop('EffectiveLength',axis=1)
     #train_dataframe = train_dataframe.drop('TPM', axis=1)
-    train_dataframe = train_dataframe.drop('NumReads',axis=1)
+    #train_dataframe = train_dataframe.drop('NumReads',axis=1)
     train_dataframe = train_dataframe.drop('Weight', axis=1)
     #train_dataframe = train_dataframe.drop('UniqueMap', axis=1)
     train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
@@ -56,4 +63,5 @@ def train_model(inputDir):
 
 #runPredictionModel("poly_ro")
 train_model("poly_mo")
+
 

@@ -45,10 +45,10 @@ import itertools
 #     plt.ylabel('True label')
 #     plt.xlabel('Predicted label')
 
-def runPredictionModel(inputDir):
-    if Path("../bin/data_" + inputDir + ".csv").is_file() == False:
+def  runPredictionModel(inputDir):
+    if Path("../bin/quant_new_" + inputDir + ".csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps(inputDir)
-    test_dataframe = pd.read_csv("../bin/data_" + inputDir + ".csv", sep="\t")
+    test_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv", sep="\t")
     test_dataframe["Length"] = test_dataframe["Length"].astype(int)
     test_dataframe["EffectiveLength"] = test_dataframe["EffectiveLength"].astype(int)
     test_dataframe["TPM"] = test_dataframe["TPM"].astype(int)
@@ -58,10 +58,10 @@ def runPredictionModel(inputDir):
 
     print("Classification started")
     test_dataframe = test_dataframe.drop('Name', axis=1)
-    test_dataframe = test_dataframe.drop('Length', axis=1)
-    test_dataframe = test_dataframe.drop('EffectiveLength', axis=1)
+    #test_dataframe = test_dataframe.drop('Length', axis=1)
+    #test_dataframe = test_dataframe.drop('EffectiveLength', axis=1)
     # test_dataframe = test_dataframe.drop('TPM', axis=1)
-    test_dataframe = test_dataframe.drop('NumReads', axis=1)
+    #test_dataframe = test_dataframe.drop('NumReads', axis=1)
     test_dataframe = test_dataframe.drop('Weight', axis=1)
     # test_dataframe = test_dataframe.drop('UniqueMap', axis=1)
     test_dataframe = test_dataframe.drop('ErrorFraction', axis=1)
@@ -98,6 +98,8 @@ def runPredictionModel(inputDir):
     # plt.show()
     print(classification_report(y_test, predictions))
     print("Classification done")
+    print(predictions[1])
+    return predictions
 
 
 
