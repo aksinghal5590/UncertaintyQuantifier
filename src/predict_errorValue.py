@@ -1,16 +1,10 @@
-from sklearn.cross_validation import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report
+
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
-from sklearn import svm
-from pathlib import Path
-from src import ParseEQ_Class
+import ParseEQ_Class
 import pickle
-import matplotlib.pyplot as plt
-import numpy as np
-import itertools
-from src import predict
-from src import EvaluateCIFromBootstrap
+import predict
+import EvaluateCIFromBootstrap
 from sklearn.metrics import r2_score
 import csv
 
@@ -27,10 +21,10 @@ def unique_map(inputDir):
         weight_map[tr] = trEQMap[tr][3]
     return uniquely_mapped_tr_list,weight_map
 
-def error():
+def error(inputDir):
     lineCount2 = 0
     truthMap = dict()
-    for line in open('../input/poly_mo/poly_truth.tsv'):
+    for line in open('../input/'+inputDir+'/poly_truth.tsv'):
         lineCount2 += 1
         if lineCount2 == 1:
             continue
@@ -41,14 +35,10 @@ def error():
 def predict_error_value(inputDir):
     predictions = predict.runPredictionModel(inputDir)
     test_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv", sep="\t")
-    print(predictions)
     se = pd.Series(predictions)
     test_dataframe['FaultyPredicted'] = se.values
-    print(test_dataframe)
     test_dataframe = test_dataframe.loc[test_dataframe.FaultyPredicted == 1]
-    print(test_dataframe)
     test_dataframe = test_dataframe.drop('FaultyPredicted', axis=1)
-    print(test_dataframe.shape)
     test_dataframe["Length"] = test_dataframe["Length"].astype(int)
     test_dataframe["EffectiveLength"] = test_dataframe["EffectiveLength"].astype(int)
     test_dataframe["TPM"] = test_dataframe["TPM"].astype(int)
@@ -56,9 +46,9 @@ def predict_error_value(inputDir):
     test_dataframe["ErrorFraction"] = test_dataframe["ErrorFraction"].astype(int)
     test_dataframe.to_csv("../bin/quant_new_regr_testing" + inputDir + ".csv", sep="\t", index=False)
 
-    truth_value = error()
+    truth_value = error(inputDir)
     unique, weight = unique_map(inputDir)
-    mean_sd_map = EvaluateCIFromBootstrap.get_mean_sd("poly_mo")
+    mean_sd_map = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
     v = open("../bin/quant_new_regr_testing" + inputDir + ".csv", "r")
     r = csv.reader(v, delimiter="\t")
     write = open("../bin/quant_rtesting_" + inputDir + ".csv", "w")
@@ -68,7 +58,7 @@ def predict_error_value(inputDir):
         if tr != "Name":
             if tr in mean_sd_map.keys():
                 row.append(mean_sd_map[tr][0])
-                row.append(mean_sd_map[tr][1])
+                row.append((mean_sd_map[tr][1])**2)
             if tr in truth_value.keys():
                 row.append(truth_value[tr])
             else:
@@ -79,7 +69,7 @@ def predict_error_value(inputDir):
                 row.append(0)
         else:
             row.append("Mean")
-            row.append("StandardDeviation")
+            row.append("Variance")
             row.append("Truth_val")
             row.append("Unique_maps")
         writer.writerow(row)
@@ -97,7 +87,7 @@ def predict_error_value(inputDir):
     # df = df.drop('Unique_maps',axis=1)
     df2 = df_test
     df_test = df_test.drop('Name', axis=1)
-    df_test = df_test.drop('Mean', axis=1)
+    #df_test = df_test.drop('Mean', axis=1)
     df_test.to_csv("../bin/testing_data_" + inputDir + ".csv", sep="\t", index=False)
     X_test = df_test.drop('error', axis=1)
     scaler = StandardScaler()
@@ -117,4 +107,4 @@ def predict_error_value(inputDir):
     df2.to_csv("../bin/pred_errorValue_" + inputDir + ".csv", sep="\t", index=False)
     print("Testing Done")
 
-predict_error_value("poly_mo")
+# predict_error_value("poly_mo")
