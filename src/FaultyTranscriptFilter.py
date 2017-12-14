@@ -6,7 +6,7 @@ def filterFaultyTranscripts(inputDir):
     ciMap = EvaluateCIFromBootstrap.evaluateCI(inputDir)
     lineCount = 0
     faultyTr = list()
-    for line in open('../input/' + inputDir + '/poly_truth.tsv'):
+    for line in open('input/' + inputDir + '/poly_truth.tsv'):
         lineCount += 1
         if lineCount == 1:
             continue
@@ -23,7 +23,7 @@ def get_faulty_txp_class(inputDir):
     ciMap = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
     lineCount = 0
     faulty_txp_class = dict()
-    for line in open('../input/' + inputDir + '/poly_truth.tsv'):
+    for line in open(inputDir + '/poly_truth.tsv'):
         lineCount += 1
         if lineCount == 1:
             continue

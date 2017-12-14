@@ -7,9 +7,9 @@ from pathlib import Path
 from src import ParseEQ_Class
 
 def runPredictionModel(inputDir):
-    if Path("../bin/quant_new_" + inputDir + ".csv").is_file() == False:
+    if Path("bin/quant_new_" + inputDir + ".csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps(inputDir)
-    train_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv",sep="\t")
+    train_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv",sep="\t")
     train_dataframe["Length"] = train_dataframe["Length"].astype(int)
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)

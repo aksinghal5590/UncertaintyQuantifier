@@ -9,44 +9,27 @@ import pickle
 
 #This function predicts the number of faulty transcripts in a dataset using the trained model.
 def  runPredictionModel(inputDir):
-    if Path("../bin/quant_new_" + inputDir + ".csv").is_file() == False:
-        ParseEQ_Class.getUniqueAndAmbiguousMaps(inputDir)
-    test_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv", sep="\t")
+    if Path("bin/quant_new_" + inputDir + ".csv").is_file() == False:
+        ParseEQ_Class.getUniqueAndAmbiguousMaps_predicted(inputDir)
+    test_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv", sep="\t")
     test_dataframe["Length"] = test_dataframe["Length"].astype(int)
     test_dataframe["EffectiveLength"] = test_dataframe["EffectiveLength"].astype(int)
     test_dataframe["TPM"] = test_dataframe["TPM"].astype(int)
     test_dataframe["NumReads"] = test_dataframe["NumReads"].astype(int)
-    test_dataframe["ErrorFraction"] = test_dataframe["ErrorFraction"].astype(int)
     #test_dataframe = test_dataframe[test_dataframe.TPM != 0]
 
     print("Classification started")
     test_dataframe = test_dataframe.drop('Name', axis=1)
     test_dataframe = test_dataframe.drop('Weight', axis=1)
-    test_dataframe = test_dataframe.drop('ErrorFraction', axis=1)
 
-    X = test_dataframe.drop('Faulty', axis=1)
-    y = test_dataframe['Faulty']
-
-    X_test = X
-    y_test = y
+    X_test = test_dataframe
     scaler = StandardScaler()
     scaler.fit(X_test)
     X_test = scaler.transform(X_test)
-    filename = 'training_model.sav'
+    filename = 'src/' + 'training_model.sav'
     clf = pickle.load(open(filename, 'rb'))
     predictions = clf.predict(X_test)
-
-    
-    print(confusion_matrix(y_test, predictions))
-
-    print(classification_report(y_test, predictions))
     print("Classification done")
-    print(predictions[1])
+    #print(predictions[1])
     return predictions
-
-
-
-
-#runPredictionModel("poly_ro")
-#drunPredictionModel("poly_mo")
 

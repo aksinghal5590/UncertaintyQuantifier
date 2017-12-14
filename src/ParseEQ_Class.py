@@ -9,7 +9,7 @@ def parseEQClass(inputDir):
     trEqMap = dict()
     i = 0
     j = 0
-    for line in open('../input/' + inputDir + '/eq_classes.txt'):
+    for line in open('input/' + inputDir + '/eq_classes.txt'):
         lineCount += 1
         if(lineCount == 1):
             trCount = int(line)
@@ -65,9 +65,9 @@ def getUniqueAndAmbiguousMaps(inputDir):
     print("Faulty list length: ", len(faultyList))
     print("Uniquely mapped faulty list length: ", len(uniquely_mapped_tr_list))
 
-    v = open('../input/' + inputDir + '/quant.sf',"r")
+    v = open('input/' + inputDir + '/quant.sf',"r")
     r = csv.reader(v,delimiter="\t")
-    write = open("../bin/quant_new_" + inputDir + ".csv", "w")
+    write = open("bin/quant_new_" + inputDir + ".csv", "w")
     writer = csv.writer(write,dialect='excel',delimiter='\t',quoting=csv.QUOTE_ALL)
     for row in r:
         tr = row[0].split('\t')[0]
@@ -98,6 +98,43 @@ def getUniqueAndAmbiguousMaps(inputDir):
     write.close()
 
 
+def getUniqueAndAmbiguousMaps_predicted(inputDir):
+    uniquely_mapped_tr_list = []
+    weight_map = dict()
+
+    trEQMap = parseEQClass(inputDir)
+    for tr in trEQMap.keys():
+        eq_tuple = trEQMap[tr]
+        if eq_tuple[1] == 1:
+            if eq_tuple[2] == 1:
+                uniquely_mapped_tr_list.append(tr)
+
+    for tr in trEQMap.keys():
+        weight_map[tr] = trEQMap[tr][3]
+
+    v = open('input/' + inputDir + '/quant.sf',"r")
+    r = csv.reader(v,delimiter="\t")
+    write = open("bin/quant_new_" + inputDir + ".csv", "w")
+    writer = csv.writer(write,dialect='excel',delimiter='\t',quoting=csv.QUOTE_ALL)
+    for row in r:
+        tr = row[0].split('\t')[0]
+        if tr != "Name":
+            if tr in uniquely_mapped_tr_list:
+                row.append(True)
+            else:
+                row.append(False)
+            if tr in weight_map.keys():
+                row.append(weight_map[tr])
+            else:
+                row.append(0)
+        else:
+            row.append("UniqueMap")
+            row.append("Weight")
+        writer.writerow(row)
+    v.close()
+    write.close()
+
+
 def get_unique_ambiguous_maps(inputDir):
     uniquely_mapped_tr_list = []
     weight_map = dict()
@@ -113,9 +150,9 @@ def get_unique_ambiguous_maps(inputDir):
     for tr in trEQMap.keys():
         weight_map[tr] = trEQMap[tr][3]
 
-    v = open('../input/' + inputDir + '/quant.sf',"r")
+    v = open('input/' + inputDir + '/quant.sf',"r")
     r = csv.reader(v,delimiter="\t")
-    write = open("../bin/quant_new_" + inputDir + ".csv", "w")
+    write = open("bin/quant_new_" + inputDir + ".csv", "w")
     writer = csv.writer(write,dialect='excel',delimiter='\t',quoting=csv.QUOTE_ALL)
     for row in r:
         tr = row[0].split('\t')[0]

@@ -4,7 +4,7 @@ from src import FaultyTranscriptFilter
 def createTPMMap(inputDir):
     lineCount = 0
     tpmMap = dict()
-    for line in open('../input/' + inputDir + '/quant.sf'):
+    for line in open('input/' + inputDir + '/quant.sf'):
         lineCount += 1
         if lineCount == 1:
             continue

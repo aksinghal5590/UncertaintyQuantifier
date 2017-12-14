@@ -7,8 +7,7 @@ import statistics
 #This function modifies the mean according to the error value and also modifies quant_bootstrap.tsv
 def error_addition(inputDir):
     predict_errorValue.predict_error_value(inputDir)
-    #df1 = pd.read_csv("../bin/testing_data_" + inputDir + ".csv", sep="\t")
-    df2 = pd.read_csv("../bin/pred_errorValue_" + inputDir + ".csv", sep="\t")
+    df2 = pd.read_csv("bin/pred_errorValue_" + inputDir + ".csv", sep="\t")
 
     i = 0
     for err in df2["Predicted_ErrorValue"]:
@@ -19,48 +18,18 @@ def error_addition(inputDir):
         i+=1
     names = df2["Name"].tolist()
 
-    trCIMap = dict()
-    with open('../input/' + inputDir + '/quant_bootstraps.tsv') as tsv:
-        for column in zip(*[line for line in csv.reader(tsv, dialect="excel-tab")]):
-            bootstrapData = list(column)
-            trID = bootstrapData.pop(0)
-            bootstrapData = [float(x) for x in bootstrapData]
-            mean = statistics.mean(bootstrapData)
-            mean1 = mean
-            sd = statistics.stdev(bootstrapData, xbar=mean)
-            if trID in names:
-                loc = names.index(trID)
-                # print(loc)
-                mean = df2.ix[loc,'Diff']
-                # if mean1 != mean:
-                    # print(mean)
-            trCIMap[trID] = (mean - 2*sd), (mean + 2*sd)
-    ciMap = trCIMap
-    lineCount = 0
-    faultyTr = list()
-    for line in open('../input/' + inputDir + '/poly_truth.tsv'):
-        lineCount += 1
-        if lineCount == 1:
-            continue
-        data = line.split('\t')
-        if data[0] in ciMap:
-            ciTuple = ciMap[data[0]]
-            if (float(data[1]) < ciTuple[0]) or (float(data[1]) > ciTuple[1]):
-                # print(data[0],data[1],ciTuple[0],ciTuple[1])
-                tuple = data[0]
-                faultyTr.append(tuple)
-
-    print(len(faultyTr))
-
-    data_frame = pd.read_csv('../input/' + inputDir + '/quant_bootstraps.tsv', sep='\t')
+    data_frame = pd.read_csv('input/' + inputDir + '/quant_bootstraps.tsv', sep='\t')
     new_names = list(data_frame.columns.values)
     # i = 0
     for name in new_names:
         if name in names:
             loc = names.index(name)
-            data_frame[name] += (df2.ix[loc,"Predicted_ErrorValue"])
-    data_frame.to_csv('../input/' + inputDir + '/quant_bootstraps_new.tsv', sep='\t',index=False)
-    print("Done")
+            if df2["Predicted_ErrorValue"] < 0:
+                data_frame[name] = data_frame[name] - (df2.ix[loc,"Predicted_ErrorValue"] * 0.5)
+            else:
+                data_frame[name] = data_frame[name] + (df2.ix[loc, "Predicted_ErrorValue"] * 0.5)
+    data_frame.to_csv('output/' + inputDir + '/quant_bootstraps_new.tsv', sep='\t',index=False)
+    print("New file created at: " + 'output/' + inputDir + '/quant_bootstraps_new.tsv')
 
 
 error_addition(sys.argv[1])

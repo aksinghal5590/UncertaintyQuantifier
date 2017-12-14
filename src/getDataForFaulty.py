@@ -1,9 +1,8 @@
-import pandas as pd
 
 def getErrorFractionAll():
     lineCount = 0
     errorMap = dict()
-    for line in open('../input/errorFraction_all.csv'):
+    for line in open('input/errorFraction_all.csv'):
         lineCount += 1
         if lineCount == 1:
             continue
@@ -15,7 +14,7 @@ def getErrorFractionAll():
 def getErrorFractionFaulty():
     lineCount=0
     errorMap = dict()
-    for line in open('../input/errorFraction_faulty.csv'):
+    for line in open('input/errorFraction_faulty.csv'):
         lineCount+=1
         if lineCount ==1:
             continue
@@ -27,11 +26,11 @@ def getErrorFractionFaulty():
 def createFaultyTranscriptCSV():
     lineCount =0
     faultyMap = dict()
-    download_dir = "../input/faultyTrData.csv"
+    download_dir = "input/faultyTrData.csv"
     csv = open(download_dir, "w")
     columnTitleRow = "ID,Length,EffectiveLength,TPM,NumReads,Weight\n"
     csv.write(columnTitleRow)
-    for line in open('../input/quant_new.csv'):
+    for line in open('input/quant_new.csv'):
         lineCount += 1
         if lineCount == 1:
             continue
@@ -50,7 +49,7 @@ def createFaultyTranscriptCSV():
             row = ID + "," + length + ","+effectiveLength+","+tpm+","+numReads+","+weight+"\n"
             csv.write(row)
 
-createFaultyTranscriptCSV()
+#createFaultyTranscriptCSV()
 
 
 

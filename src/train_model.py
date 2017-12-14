@@ -10,12 +10,12 @@ import pickle
 
 # This function is used to create classification model which will be used to predict faulty transcripts.
 def train_model(inputDir):
-    if Path("../bin/quant_new_poly_mo.csv").is_file() == False:
+    if Path("bin/quant_new_poly_mo.csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_mo")
-    train_dataframe1 = pd.read_csv("../bin/quant_new_poly_mo.csv", sep="\t")
-    if Path("../bin/quant_new_poly_ro.csv").is_file() == False:
+    train_dataframe1 = pd.read_csv("bin/quant_new_poly_mo.csv", sep="\t")
+    if Path("bin/quant_new_poly_ro.csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_ro")
-    train_dataframe2 = pd.read_csv("../bin/quant_new_poly_ro.csv",sep="\t")
+    train_dataframe2 = pd.read_csv("bin/quant_new_poly_ro.csv",sep="\t")
     train_dataframe = pd.concat([train_dataframe1,train_dataframe2], axis=0)
     train_dataframe["Length"] = train_dataframe["Length"].astype(int)
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
@@ -43,9 +43,5 @@ def train_model(inputDir):
     filename = 'training_model.sav'
     pickle.dump(clf, open(filename, 'wb'))
     print("Training done")
-
-
-#runPredictionModel("poly_ro")
-train_model("poly_mo")
 
 
