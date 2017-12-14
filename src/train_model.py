@@ -12,11 +12,11 @@ def train_model(inputDir):
     if Path("../bin/quant_new_poly_mo.csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_mo")
     #train_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv",sep="\t")
-    train_dataframe1 = pd.read_csv("../bin/quant_new_poly_mo.csv", sep="\t")
-    if Path("../bin/quant_new_poly_ro.csv").is_file() == False:
-        ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_ro")
-    train_dataframe2 = pd.read_csv("../bin/quant_new_poly_ro.csv",sep="\t")
-    train_dataframe = pd.concat([train_dataframe1,train_dataframe2], axis=0)
+    train_dataframe = pd.read_csv("../bin/quant_new_poly_mo.csv", sep="\t")
+    # if Path("../bin/quant_new_poly_ro.csv").is_file() == False:
+    #     ParseEQ_Class.getUniqueAndAmbiguousMaps("poly_ro")
+    # train_dataframe2 = pd.read_csv("../bin/quant_new_poly_ro.csv",sep="\t")
+    # train_dataframe = pd.concat([train_dataframe1,train_dataframe2], axis=0)
     #train_dataframe = pd.read_csv("../bin/quant_new_" + inputDir + ".csv",sep="\t")
     print(train_dataframe.shape)
     train_dataframe["Length"] = train_dataframe["Length"].astype(int)

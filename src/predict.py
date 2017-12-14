@@ -1,4 +1,3 @@
-from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
@@ -6,9 +5,6 @@ from sklearn import svm
 from pathlib import Path
 from src import ParseEQ_Class
 import pickle
-import matplotlib.pyplot as plt
-import numpy as np
-import itertools
 
 
 # def plot_confusion_matrix(cm, classes,
@@ -104,6 +100,6 @@ def  runPredictionModel(inputDir):
 
 
 
-runPredictionModel("poly_ro")
-#drunPredictionModel("poly_mo")
+#runPredictionModel("poly_ro")
+#runPredictionModel("poly_mo")
 
