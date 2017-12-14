@@ -1,4 +1,4 @@
-from src import FaultyTranscriptFilter
+import FaultyTranscriptFilter
 import pandas as pd
 
 def get_FaultyTranscriptError_CSV():

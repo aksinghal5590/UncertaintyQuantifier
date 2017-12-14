@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 from sklearn import svm
 from pathlib import Path
-from src import ParseEQ_Class
+import ParseEQ_Class
 import pickle
 
 # This function is used to create classification model which will be used to predict faulty transcripts.
@@ -46,6 +46,6 @@ def train_model(inputDir):
 
 
 #runPredictionModel("poly_ro")
-#train_model("poly_mo")
+train_model("poly_mo")
 
 
