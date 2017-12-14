@@ -36,7 +36,7 @@ def  runPredictionModel(inputDir):
     clf = pickle.load(open(filename, 'rb'))
     predictions = clf.predict(X_test)
 
-
+    
     print(confusion_matrix(y_test, predictions))
 
     print(classification_report(y_test, predictions))

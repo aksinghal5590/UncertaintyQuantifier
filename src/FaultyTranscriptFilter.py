@@ -1,6 +1,7 @@
-from src import EvaluateCIFromBootstrap
+import EvaluateCIFromBootstrap
 
-
+#This function filters faulty transcripts by comparing mean values with poly truth value. Hence giving the
+#actual count of faulty transcripts
 def filterFaultyTranscripts(inputDir):
     ciMap = EvaluateCIFromBootstrap.evaluateCI(inputDir)
     lineCount = 0

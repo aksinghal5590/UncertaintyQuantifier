@@ -1,6 +1,7 @@
 import csv
 import statistics
 
+#This function iterates over quant_bootstrap.tsv and creates a map for confidence interval for each transcript
 def evaluateCI(inputDir):
     trCIMap = dict()
     with open('../input/' + inputDir + '/quant_bootstraps.tsv') as tsv:
@@ -13,7 +14,7 @@ def evaluateCI(inputDir):
             trCIMap[trID] = (mean - 2*sd), (mean + 2*sd)
     return trCIMap
 
-
+#This is a utilty function is calculate mean and standard deviation of each column.
 def get_mean_sd(inputDir):
     txp_mean_sd_map = dict()
     with open('../input/' + inputDir + '/quant_bootstraps.tsv') as tsv:

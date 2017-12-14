@@ -4,14 +4,12 @@ import pandas as pd
 import csv
 import statistics
 
+#This function modifies the mean according to the error value and also modifies quant_bootstrap.tsv
 def error_addition(inputDir):
     predict_errorValue.predict_error_value(inputDir)
-    # print("I am in")
-    df1 = pd.read_csv("../bin/testing_data_" + inputDir + ".csv", sep="\t")
+    #df1 = pd.read_csv("../bin/testing_data_" + inputDir + ".csv", sep="\t")
     df2 = pd.read_csv("../bin/pred_errorValue_" + inputDir + ".csv", sep="\t")
-    # print(df1["StandardDeviation"],df2["Predicted_ErrorValue"])
-    # df2["Diff1"] = abs(df2["Predicted_ErrorValue"]) - (1*df1["StandardDeviation"])
-    # print(x)
+
     i = 0
     for err in df2["Predicted_ErrorValue"]:
         if err < 0:
@@ -19,9 +17,7 @@ def error_addition(inputDir):
         if err > 0:
             df2.ix[i,"Diff"] = df2.ix[i,"Mean"] + (df2.ix[i,"Predicted_ErrorValue"])*(0.5)
         i+=1
-    # print(df2, df1["Variance"])
     names = df2["Name"].tolist()
-    # print(df2["Diff"])
 
     trCIMap = dict()
     with open('../input/' + inputDir + '/quant_bootstraps.tsv') as tsv:
