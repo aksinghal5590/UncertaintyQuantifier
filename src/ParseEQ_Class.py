@@ -1,5 +1,5 @@
-from src import FaultyTranscriptFilter
-from src import dataForGraphs
+import FaultyTranscriptFilter
+import dataForGraphs
 import csv
 
 def parseEQClass(inputDir):
