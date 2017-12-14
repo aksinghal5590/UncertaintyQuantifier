@@ -26,10 +26,10 @@ def unique_map(inputDir):
         weight_map[tr] = trEQMap[tr][3]
     return uniquely_mapped_tr_list,weight_map
 
-def error():
+def error(inputDir):
     lineCount2 = 0
     truthMap = dict()
-    for line in open('../input/poly_ro/poly_truth.tsv'):
+    for line in open('../input/'+inputDir+'/poly_truth.tsv'):
         lineCount2 += 1
         if lineCount2 == 1:
             continue
@@ -51,22 +51,12 @@ def train_model(inputDir):
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)
     train_dataframe["NumReads"] = train_dataframe["NumReads"].astype(int)
     train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
-    #train_dataframe = train_dataframe[train_dataframe.TPM != 0]
+    train_dataframe = train_dataframe[train_dataframe.TPM != 0]
 
-    # print("Classification started")
-    #train_dataframe = train_dataframe.drop('Name', axis=1)
-    #train_dataframe = train_dataframe.drop('Length',axis=1)
-    #train_dataframe = train_dataframe.drop('EffectiveLength',axis=1)
-    # #train_dataframe = train_dataframe.drop('TPM', axis=1)
-    #train_dataframe = train_dataframe.drop('NumReads',axis=1)
-    #train_dataframe = train_dataframe.drop('Weight', axis=1)
-    # #train_dataframe = train_dataframe.drop('UniqueMap', axis=1)
-    #train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
-   # print(train_dataframe)
     train_dataframe.to_csv("../bin/quant_new_regr_" + inputDir + ".csv",sep="\t",index=False)
-    truth_value = error()
+    truth_value = error(inputDir)
     unique, weight = unique_map(inputDir)
-    mean_sd_map = EvaluateCIFromBootstrap.get_mean_sd("poly_ro")
+    mean_sd_map = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
     v = open("../bin/quant_new_regr_" + inputDir + ".csv", "r")
     r = csv.reader(v, delimiter="\t")
     write = open("../bin/quant_rtraining_" + inputDir + ".csv", "w")
@@ -76,7 +66,7 @@ def train_model(inputDir):
         if tr != "Name":
             if tr in mean_sd_map.keys():
                 row.append(mean_sd_map[tr][0])
-                row.append(mean_sd_map[tr][1])
+                row.append((mean_sd_map[tr][1])**2)
             if tr in truth_value.keys():
                 row.append(truth_value[tr])
             else:
@@ -87,7 +77,7 @@ def train_model(inputDir):
                 row.append(0)
         else:
             row.append("Mean")
-            row.append("StandardDeviation")
+            row.append("Variance")
             row.append("Truth_val")
             row.append("Unique_maps")
         writer.writerow(row)
@@ -126,4 +116,4 @@ def train_model(inputDir):
     pickle.dump(regr, open(filename, 'wb'))
     print("Training done")
 
-train_model("poly_ro")
+train_model("poly_mo")
