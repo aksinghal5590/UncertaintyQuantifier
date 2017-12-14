@@ -40,8 +40,9 @@ def train_model(inputDir):
 
     clf = svm.SVC(gamma=0.001, C=500)
     clf.fit(X_train, y_train)
-    filename = 'training_model.sav'
+    filename = 'src/training_model.sav'
     pickle.dump(clf, open(filename, 'wb'))
     print("Training done")
 
 
+train_model("poly_mo")

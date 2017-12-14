@@ -30,6 +30,7 @@ def  runPredictionModel(inputDir):
     clf = pickle.load(open(filename, 'rb'))
     predictions = clf.predict(X_test)
     print("Classification done")
+    print(len(predictions))
     #print(predictions[1])
     return predictions
 

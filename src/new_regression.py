@@ -1,16 +1,11 @@
-from src import FaultyTranscriptFilter
-from sklearn.preprocessing import StandardScaler
+import FaultyTranscriptFilter
 import pandas as pd
-from sklearn import svm
 from pathlib import Path
-from src import ParseEQ_Class
-import pickle
-from src import EvaluateCIFromBootstrap
+import ParseEQ_Class
+import EvaluateCIFromBootstrap
 import csv
-from src import ParseEQ_Class
-from sklearn.metrics import r2_score
+import pickle
 from sklearn.preprocessing import StandardScaler
-from sklearn.cross_validation import train_test_split
 from sklearn import linear_model
 
 def unique_map(inputDir):
@@ -29,7 +24,7 @@ def unique_map(inputDir):
 def error(inputDir):
     lineCount2 = 0
     truthMap = dict()
-    for line in open(inputDir+'/poly_truth.tsv'):
+    for line in open('input/'+inputDir+'/poly_truth.tsv'):
         lineCount2 += 1
         if lineCount2 == 1:
             continue
@@ -112,7 +107,7 @@ def train_model(inputDir):
 
     regr = linear_model.LinearRegression()
     regr.fit(X_train, y_train)
-    filename = 'Regression_model.sav'
+    filename = 'src/Regression_model.sav'
     pickle.dump(regr, open(filename, 'wb'))
     print("Training done")
 

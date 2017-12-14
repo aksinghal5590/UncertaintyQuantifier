@@ -17,7 +17,7 @@ def filterFaultyTranscripts(inputDir):
             if (float(data[1]) < ciTuple[0]) or (float(data[1]) > ciTuple[1]):
                 tuple = data[0]
                 faultyTr.append(tuple)
-    print(faultyTr)
+    print(len(faultyTr))
 
 
 filterFaultyTranscripts(sys.argv[1])
