@@ -45,7 +45,7 @@ def train_model(inputDir):
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)
     train_dataframe["NumReads"] = train_dataframe["NumReads"].astype(int)
-    train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
+    # train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
     train_dataframe = train_dataframe[train_dataframe.TPM != 0]
 
     train_dataframe.to_csv("bin/quant_new_regr_" + inputDir + ".csv",sep="\t",index=False)
@@ -59,22 +59,22 @@ def train_model(inputDir):
     for row in r:
         tr = row[0].split('\t')[0]
         if tr != "Name":
-            if tr in mean_sd_map.keys():
-                row.append(mean_sd_map[tr][0])
-                row.append((mean_sd_map[tr][1])**2)
+            # if tr in mean_sd_map.keys():
+            #     row.append(mean_sd_map[tr][0])
+            #     row.append((mean_sd_map[tr][1])**2)
             if tr in truth_value.keys():
                 row.append(truth_value[tr])
             else:
                 row.append(0)
-            if tr in unique:
-                row.append(1)
-            else:
-                row.append(0)
+            # if tr in unique:
+            #     row.append(1)
+            # else:
+            #     row.append(0)
         else:
-            row.append("Mean")
-            row.append("Variance")
+            # row.append("Mean")
+            # row.append("Variance")
             row.append("Truth_val")
-            row.append("Unique_maps")
+            # row.append("Unique_maps")
         writer.writerow(row)
     v.close()
     write.close()
@@ -87,10 +87,10 @@ def train_model(inputDir):
     df = df.drop('Truth_val', axis=1)
     df = df.drop('Name', axis=1)
     df = df.drop('Faulty', axis=1)
-    df = df.drop('UniqueMap', axis=1)
-    df = df.drop('ErrorFraction', axis=1)
-    df = df.drop('Length',axis=1)
-    df = df.drop('EffectiveLength',axis=1)
+    # df = df.drop('UniqueMap', axis=1)
+    # df = df.drop('ErrorFraction', axis=1)
+    # df = df.drop('Length',axis=1)
+    # df = df.drop('EffectiveLength',axis=1)
     # df = df.drop('Unique_maps',axis=1)
     #df = df.drop('Mean', axis=1)
     X = df.drop('error', axis=1)

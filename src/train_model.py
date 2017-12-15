@@ -1,12 +1,10 @@
-
-
-
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 from sklearn import svm
 from pathlib import Path
 import ParseEQ_Class
 import pickle
+import EvaluateCIFromBootstrap
 
 # This function is used to create classification model which will be used to predict faulty transcripts.
 def train_model(inputDir):
@@ -21,12 +19,15 @@ def train_model(inputDir):
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)
     train_dataframe["NumReads"] = train_dataframe["NumReads"].astype(int)
-    train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
+    # train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
+    train_dataframe["Mean"] = train_dataframe["Mean"].astype(int)
+    train_dataframe["Variance"] = train_dataframe["Variance"].astype(int)
     print(train_dataframe.shape)
     print("Classification started")
     train_dataframe = train_dataframe.drop('Name', axis=1)
     train_dataframe = train_dataframe.drop('Weight', axis=1)
-    train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
+    # train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
+
 
     X = train_dataframe.drop('Faulty', axis=1)
     y = train_dataframe['Faulty']

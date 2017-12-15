@@ -7,6 +7,9 @@ import predict
 import EvaluateCIFromBootstrap
 import csv
 
+import warnings
+warnings.filterwarnings("ignore")
+
 def unique_map(inputDir):
     uniquely_mapped_tr_list = []
     weight_map = dict()
@@ -21,8 +24,9 @@ def unique_map(inputDir):
     return uniquely_mapped_tr_list,weight_map
 
 
-def predict_error_value(inputDir):
+def predict_error_value(inputDir):   
     predictions = predict.runPredictionModel(inputDir)
+    print("Predicting Error values for faulty transcripts..................................................................................................")
     test_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv", sep="\t")
     se = pd.Series(predictions)
     test_dataframe['FaultyPredicted'] = se.values
@@ -41,27 +45,24 @@ def predict_error_value(inputDir):
     writer = csv.writer(write, dialect='excel', delimiter='\t', quoting=csv.QUOTE_ALL)
     for row in r:
         tr = row[0].split('\t')[0]
-        if tr != "Name":
-            if tr in mean_sd_map.keys():
-                row.append(mean_sd_map[tr][0])
-                row.append((mean_sd_map[tr][1])**2)
-            if tr in unique:
-                row.append(1)
-            else:
-                row.append(0)
-        else:
-            row.append("Mean")
-            row.append("Variance")
+        # if tr != "Name":
+            # if tr in mean_sd_map.keys():
+            #     row.append(mean_sd_map[tr][0])
+            #     row.append((mean_sd_map[tr][1])**2)
+            # if tr in unique:
+            #     row.append(1)
+            # else:
+            #     row.append(0)
+        # else:
+        #     row.append("Mean")
+        #     row.append("Variance")
             # row.append("Truth_val")
-            row.append("Unique_maps")
+            # row.append("Unique_maps")
         writer.writerow(row)
     v.close()
     write.close()
 
     df_test = pd.read_csv("bin/quant_rtesting_" + inputDir + ".csv", sep="\t")
-    df_test = df_test.drop('Length',axis=1)
-    df_test = df_test.drop('EffectiveLength',axis=1)
-    df_test = df_test.drop('UniqueMap',axis=1)
     df2 = df_test
     df_test = df_test.drop('Name', axis=1)
     df_test.to_csv("bin/testing_data_" + inputDir + ".csv", sep="\t", index=False)
@@ -76,6 +77,7 @@ def predict_error_value(inputDir):
     se2 = pd.Series(predictions)
     df2['Predicted_ErrorValue'] = se2.values
     df2.to_csv("bin/pred_errorValue_" + inputDir + ".csv", sep="\t", index=False)
-    print("Testing Done")
+    print("Error values predicted.")
 
-predict_error_value("poly_mo")
+# predict_error_value("poly_mo")
+

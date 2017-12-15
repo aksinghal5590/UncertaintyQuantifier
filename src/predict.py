@@ -6,9 +6,12 @@ from pathlib import Path
 import ParseEQ_Class
 import pickle
 
+import warnings
+warnings.filterwarnings("ignore")
 
 #This function predicts the number of faulty transcripts in a dataset using the trained model.
 def  runPredictionModel(inputDir):
+    print("Predicting Faulty Transcripts...................................................................................................................")
     if Path("bin/quant_new_" + inputDir + ".csv").is_file() == False:
         ParseEQ_Class.getUniqueAndAmbiguousMaps_predicted(inputDir)
     test_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv", sep="\t")
@@ -30,7 +33,14 @@ def  runPredictionModel(inputDir):
     clf = pickle.load(open(filename, 'rb'))
     predictions = clf.predict(X_test)
     print("Classification done")
-    print(len(predictions))
+    # print(len(predictions))
+    count = 0
+    for pre in predictions:
+        if pre:
+            count += 1
+    # print("Faulty Transcripts predicted:",count)
+    print("Processing to reduce the faulty transcripts count...............................................................................................")
     #print(predictions[1])
     return predictions
 
+# runPredictionModel("poly_mo")
