@@ -28,7 +28,7 @@
 	Note: Please add poly_truth.tsv to input directory before running the verification command.
 	
 
-*Following is the commands and output after running the application. This can be used as a verification if process finished or not-
+* Commands and Output:
 ```
 D:\SBU\UncertaintyQuantifier>python src/error_addition.py poly_mo
 Loading Files and Processing....................................................................................................................
