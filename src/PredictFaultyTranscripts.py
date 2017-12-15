@@ -6,10 +6,10 @@ from sklearn import svm
 from pathlib import Path
 from src import ParseEQ_Class
 
-def runPredictionModel():
-    if Path("../bin/quant_new.csv").is_file() == False:
-        ParseEQ_Class.getUniqueAndAmbiguousMaps()
-    train_dataframe = pd.read_csv("../bin/quant_new.csv",sep="\t")
+def runPredictionModel(inputDir):
+    if Path("bin/quant_new_" + inputDir + ".csv").is_file() == False:
+        ParseEQ_Class.getUniqueAndAmbiguousMaps(inputDir)
+    train_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv",sep="\t")
     train_dataframe["Length"] = train_dataframe["Length"].astype(int)
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)
@@ -24,7 +24,7 @@ def runPredictionModel():
     train_dataframe = train_dataframe.drop('NumReads',axis=1)
     train_dataframe = train_dataframe.drop('Weight', axis=1)
     #train_dataframe = train_dataframe.drop('UniqueMap', axis=1)
-    #train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
+    train_dataframe = train_dataframe.drop('ErrorFraction', axis=1)
 
     X = train_dataframe.drop('Faulty', axis=1)
     y = train_dataframe['Faulty']
@@ -47,4 +47,6 @@ def runPredictionModel():
     print(classification_report(y_test, predictions))
     print("Classification done")
 
-runPredictionModel()
+
+runPredictionModel("poly_ro")
+runPredictionModel("poly_mo")
