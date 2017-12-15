@@ -28,8 +28,8 @@
 	Note: Please add poly_truth.tsv to input directory before running the verification command.
 	
 
-	Following is the commands and output after running the application. This can be used as a verification if process finished or not-
-
+* Commands and Output:
+```
 D:\SBU\UncertaintyQuantifier>python src/error_addition.py poly_mo
 Loading Files and Processing....................................................................................................................
 Predicting Faulty Transcripts...................................................................................................................
@@ -47,3 +47,5 @@ D:\SBU\UncertaintyQuantifier>python src/verify_faulty_transcripts.py poly_mo
 Counting faulty Transcripts in new quant_bootstrap.tsv..........................................................................................
 Faulty Transcripts Count in the new file: 10871
 Process finished.
+
+```
