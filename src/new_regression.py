@@ -1,16 +1,11 @@
-from src import FaultyTranscriptFilter
-from sklearn.preprocessing import StandardScaler
+import FaultyTranscriptFilter
 import pandas as pd
-from sklearn import svm
 from pathlib import Path
-from src import ParseEQ_Class
-import pickle
-from src import EvaluateCIFromBootstrap
+import ParseEQ_Class
+import EvaluateCIFromBootstrap
 import csv
-from src import ParseEQ_Class
-from sklearn.metrics import r2_score
+import pickle
 from sklearn.preprocessing import StandardScaler
-from sklearn.cross_validation import train_test_split
 from sklearn import linear_model
 
 def unique_map(inputDir):
@@ -29,7 +24,7 @@ def unique_map(inputDir):
 def error(inputDir):
     lineCount2 = 0
     truthMap = dict()
-    for line in open(inputDir+'/poly_truth.tsv'):
+    for line in open('input/'+inputDir+'/poly_truth.tsv'):
         lineCount2 += 1
         if lineCount2 == 1:
             continue
@@ -50,7 +45,7 @@ def train_model(inputDir):
     train_dataframe["EffectiveLength"] = train_dataframe["EffectiveLength"].astype(int)
     train_dataframe["TPM"] = train_dataframe["TPM"].astype(int)
     train_dataframe["NumReads"] = train_dataframe["NumReads"].astype(int)
-    train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
+    # train_dataframe["ErrorFraction"] = train_dataframe["ErrorFraction"].astype(int)
     train_dataframe = train_dataframe[train_dataframe.TPM != 0]
 
     train_dataframe.to_csv("bin/quant_new_regr_" + inputDir + ".csv",sep="\t",index=False)
@@ -64,22 +59,22 @@ def train_model(inputDir):
     for row in r:
         tr = row[0].split('\t')[0]
         if tr != "Name":
-            if tr in mean_sd_map.keys():
-                row.append(mean_sd_map[tr][0])
-                row.append((mean_sd_map[tr][1])**2)
+            # if tr in mean_sd_map.keys():
+            #     row.append(mean_sd_map[tr][0])
+            #     row.append((mean_sd_map[tr][1])**2)
             if tr in truth_value.keys():
                 row.append(truth_value[tr])
             else:
                 row.append(0)
-            if tr in unique:
-                row.append(1)
-            else:
-                row.append(0)
+            # if tr in unique:
+            #     row.append(1)
+            # else:
+            #     row.append(0)
         else:
-            row.append("Mean")
-            row.append("Variance")
+            # row.append("Mean")
+            # row.append("Variance")
             row.append("Truth_val")
-            row.append("Unique_maps")
+            # row.append("Unique_maps")
         writer.writerow(row)
     v.close()
     write.close()
@@ -92,10 +87,10 @@ def train_model(inputDir):
     df = df.drop('Truth_val', axis=1)
     df = df.drop('Name', axis=1)
     df = df.drop('Faulty', axis=1)
-    df = df.drop('UniqueMap', axis=1)
-    df = df.drop('ErrorFraction', axis=1)
-    df = df.drop('Length',axis=1)
-    df = df.drop('EffectiveLength',axis=1)
+    # df = df.drop('UniqueMap', axis=1)
+    # df = df.drop('ErrorFraction', axis=1)
+    # df = df.drop('Length',axis=1)
+    # df = df.drop('EffectiveLength',axis=1)
     # df = df.drop('Unique_maps',axis=1)
     #df = df.drop('Mean', axis=1)
     X = df.drop('error', axis=1)
@@ -112,7 +107,7 @@ def train_model(inputDir):
 
     regr = linear_model.LinearRegression()
     regr.fit(X_train, y_train)
-    filename = 'src/' + 'Regression_model.sav'
+    filename = 'src/Regression_model.sav'
     pickle.dump(regr, open(filename, 'wb'))
     print("Training done")
 

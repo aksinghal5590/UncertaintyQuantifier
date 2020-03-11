@@ -1,6 +1,7 @@
 import FaultyTranscriptFilter
 import dataForGraphs
 import csv
+import EvaluateCIFromBootstrap
 
 def parseEQClass(inputDir):
     trCount = 0
@@ -50,6 +51,7 @@ def getUniqueAndAmbiguousMaps(inputDir):
     weight_map = dict()
     faultyList = FaultyTranscriptFilter.filterFaultyTranscripts(inputDir)
     errorMap = dataForGraphs.get_AllTrancriptsError_CSV(inputDir)
+    mean_sd = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
 
     trEQMap = parseEQClass(inputDir)
     for tr in faultyList:
@@ -72,26 +74,32 @@ def getUniqueAndAmbiguousMaps(inputDir):
     for row in r:
         tr = row[0].split('\t')[0]
         if tr != "Name":
-            if tr in uniquely_mapped_tr_list:
-                row.append(True)
-            else:
-                row.append(False)
+            # if tr in uniquely_mapped_tr_list:
+            #     row.append(True)
+            # else:
+            #     row.append(False)
+            if tr in mean_sd:
+                row.append(mean_sd[tr][0])
+            if tr in mean_sd:
+                row.append((mean_sd[tr][1])**2)
             if tr in weight_map.keys():
                 row.append(weight_map[tr])
             else:
                 row.append(0)
-            if tr in errorMap.keys():
-                row.append(errorMap[tr]*10000)
-            else:
-                row.append(0)
+            # if tr in errorMap.keys():
+            #     row.append(errorMap[tr]*10000)
+            # else:
+            #     row.append(0)
             if tr in faultyList:
                 row.append(True)
             else:
                 row.append(False)
         else:
-            row.append("UniqueMap")
+            # row.append("UniqueMap")
+            row.append("Mean")
+            row.append("Variance")
             row.append("Weight")
-            row.append("ErrorFraction")
+            # row.append("ErrorFraction")
             row.append("Faulty")
         writer.writerow(row)
     v.close()
@@ -101,6 +109,7 @@ def getUniqueAndAmbiguousMaps(inputDir):
 def getUniqueAndAmbiguousMaps_predicted(inputDir):
     uniquely_mapped_tr_list = []
     weight_map = dict()
+    mean_sd = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
 
     trEQMap = parseEQClass(inputDir)
     for tr in trEQMap.keys():
@@ -119,16 +128,22 @@ def getUniqueAndAmbiguousMaps_predicted(inputDir):
     for row in r:
         tr = row[0].split('\t')[0]
         if tr != "Name":
-            if tr in uniquely_mapped_tr_list:
-                row.append(True)
-            else:
-                row.append(False)
+            if tr in mean_sd:
+                row.append(mean_sd[tr][0])
+            if tr in mean_sd:
+                row.append((mean_sd[tr][1])**2)
+            # if tr in uniquely_mapped_tr_list:
+            #     row.append(True)
+            # else:
+            #     row.append(False)
             if tr in weight_map.keys():
                 row.append(weight_map[tr])
             else:
                 row.append(0)
         else:
-            row.append("UniqueMap")
+            # row.append("UniqueMap")
+            row.append("Mean")
+            row.append("Variance")
             row.append("Weight")
         writer.writerow(row)
     v.close()
