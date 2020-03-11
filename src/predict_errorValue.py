@@ -21,17 +21,6 @@ def unique_map(inputDir):
         weight_map[tr] = trEQMap[tr][3]
     return uniquely_mapped_tr_list,weight_map
 
-def error(inputDir):
-    lineCount2 = 0
-    truthMap = dict()
-    for line in open(inputDir+'/poly_truth.tsv'):
-        lineCount2 += 1
-        if lineCount2 == 1:
-            continue
-        data = line.split('\t')
-        truthMap[data[0]] = int(data[1])
-    return truthMap
-
 def predict_error_value(inputDir):
     predictions = predict.runPredictionModel(inputDir)
     test_dataframe = pd.read_csv("bin/quant_new_" + inputDir + ".csv", sep="\t")
@@ -43,10 +32,8 @@ def predict_error_value(inputDir):
     test_dataframe["EffectiveLength"] = test_dataframe["EffectiveLength"].astype(int)
     test_dataframe["TPM"] = test_dataframe["TPM"].astype(int)
     test_dataframe["NumReads"] = test_dataframe["NumReads"].astype(int)
-    test_dataframe["ErrorFraction"] = test_dataframe["ErrorFraction"].astype(int)
     test_dataframe.to_csv("bin/quant_new_regr_testing" + inputDir + ".csv", sep="\t", index=False)
 
-    truth_value = error(inputDir)
     unique, weight = unique_map(inputDir)
     mean_sd_map = EvaluateCIFromBootstrap.get_mean_sd(inputDir)
     v = open("bin/quant_new_regr_testing" + inputDir + ".csv", "r")
@@ -59,10 +46,6 @@ def predict_error_value(inputDir):
             if tr in mean_sd_map.keys():
                 row.append(mean_sd_map[tr][0])
                 row.append((mean_sd_map[tr][1])**2)
-            if tr in truth_value.keys():
-                row.append(truth_value[tr])
-            else:
-                row.append(0)
             if tr in unique:
                 row.append(1)
             else:
@@ -70,7 +53,6 @@ def predict_error_value(inputDir):
         else:
             row.append("Mean")
             row.append("Variance")
-            row.append("Truth_val")
             row.append("Unique_maps")
         writer.writerow(row)
     v.close()
@@ -81,8 +63,6 @@ def predict_error_value(inputDir):
     df_test = df_test.drop('Truth_val', axis=1)
     df_test = df_test.drop('Length',axis=1)
     df_test = df_test.drop('EffectiveLength',axis=1)
-    df_test = df_test.drop('ErrorFraction',axis=1)
-    df_test = df_test.drop('Faulty',axis=1)
     df_test = df_test.drop('UniqueMap',axis=1)
     # df = df.drop('Unique_maps',axis=1)
     df2 = df_test

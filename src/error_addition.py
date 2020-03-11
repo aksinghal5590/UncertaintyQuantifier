@@ -24,7 +24,7 @@ def error_addition(inputDir):
     for name in new_names:
         if name in names:
             loc = names.index(name)
-            if df2["Predicted_ErrorValue"] < 0:
+            if df2.ix[loc,"Predicted_ErrorValue"] < 0:
                 data_frame[name] = data_frame[name] - (df2.ix[loc,"Predicted_ErrorValue"] * 0.5)
             else:
                 data_frame[name] = data_frame[name] + (df2.ix[loc, "Predicted_ErrorValue"] * 0.5)

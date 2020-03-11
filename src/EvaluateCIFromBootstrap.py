@@ -17,7 +17,7 @@ def evaluateCI(inputDir):
 #This is a utilty function is calculate mean and standard deviation of each column.
 def get_mean_sd(inputDir):
     txp_mean_sd_map = dict()
-    with open(inputDir + '/quant_bootstraps.tsv') as tsv:
+    with open('input/' + inputDir + '/quant_bootstraps.tsv') as tsv:
         for column in zip(*[line for line in csv.reader(tsv, dialect="excel-tab")]):
             bootstrapData = list(column)
             trID = bootstrapData.pop(0)

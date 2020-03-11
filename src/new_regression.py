@@ -112,7 +112,7 @@ def train_model(inputDir):
 
     regr = linear_model.LinearRegression()
     regr.fit(X_train, y_train)
-    filename = 'Regression_model.sav'
+    filename = 'src/' + 'Regression_model.sav'
     pickle.dump(regr, open(filename, 'wb'))
     print("Training done")
 
