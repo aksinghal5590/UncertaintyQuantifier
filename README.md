@@ -1,3 +1,5 @@
+* [Project Report](docs/Report.pdf)
+
 * The project is developed in Python 3.6.
 
 * Pre-requisites: 
